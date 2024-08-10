@@ -1,12 +1,10 @@
-import { createStore } from "redux";
-
-const initialState = {
+const INITIAL_STATE_ACCOUNT = {
   balance: 0,
   loan: 0,
   loanPurpose: "",
 };
 
-function reducer(state = initialState, action) {
+export default function accountReducer(state = INITIAL_STATE_ACCOUNT, action) {
   switch (action.type) {
     case "account/deposit":
       return { ...state, balance: state.balance + action.payload };
@@ -37,17 +35,24 @@ function reducer(state = initialState, action) {
   }
 }
 
-const store = createStore(reducer);
+export function deposit(amount) {
+  return { type: "account/deposit", payload: amount };
+}
 
-store.dispatch({ type: "account/deposit", payload: 1000 });
-console.log(store.getState());
-store.dispatch({ type: "account/withdraw", payload: 156 });
-console.log(store.getState());
-store.dispatch({
-  type: "account/requestLoan",
-  payload: {
-    amount: 10000,
-    purpose: "To buy a house",
-  },
-});
-console.log(store.getState());
+export function payLoan() {
+  return { type: "account/payLoan" };
+}
+
+export function requestLoan(amount, purpose) {
+  return {
+    type: "account/requestLoan",
+    payload: {
+      amount: amount,
+      purpose: purpose,
+    },
+  };
+}
+
+export function withdraw(amount) {
+  return { type: "account/withdraw", payload: amount };
+}
