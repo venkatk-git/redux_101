@@ -11,7 +11,7 @@ import "./index.css";
 //Components
 import App from "./App.jsx";
 
-//Redux
+//Redux store
 import store from "./store";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
