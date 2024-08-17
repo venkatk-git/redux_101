@@ -1,13 +1,13 @@
 //Dependencies
-import { combineReducers, createStore } from "redux";
+import { configureStore } from "@reduxjs/toolkit";
 
 //Reducers
 import accountReducer from "../features/accounts/accountSlice";
 import customerReducer from "../features/customers/customerSlice";
 
-const rootReducer = combineReducers({
-  account: accountReducer,
-  customer: customerReducer,
+export default configureStore({
+  reducer: {
+    account: accountReducer,
+    customer: customerReducer,
+  },
 });
-
-export default createStore(rootReducer);
