@@ -94,12 +94,10 @@ function AccountOperations() {
           <button onClick={handleRequestLoan}>Request loan</button>
         </div>
 
-        {account.loan > 0 && (
-          <div>
-            <span>Pay back ${account.loan}</span>
-            <button onClick={handlePayLoan}>Pay loan</button>
-          </div>
-        )}
+        <div>
+          <span>Pay back ${account.loan}</span>
+          <button onClick={handlePayLoan}>Pay loan</button>
+        </div>
       </div>
     </div>
   );

@@ -5,6 +5,7 @@ const INITIAL_STATE_ACCOUNT = {
   balance: 0,
   loan: 0,
   loanPurpose: "",
+  isLoading: false,
 };
 
 const accountSlice = createSlice({
@@ -13,6 +14,7 @@ const accountSlice = createSlice({
   reducers: {
     deposit(state, action) {
       state.balance += action.payload;
+      state.isLoading = false;
     },
 
     withdraw(state, action) {
@@ -24,7 +26,7 @@ const accountSlice = createSlice({
         return {
           payload: {
             amount,
-            purpose, 
+            purpose,
           },
         };
       },
@@ -43,10 +45,29 @@ const accountSlice = createSlice({
       state.loan = 0;
       state.loanPurpose = "";
     },
+
+    convertingCurrency(state) {
+      state.isLoading = true;
+    },
   },
 });
 
-export const { deposit, withdraw, requestLoan, payLoan } = accountSlice.actions;
+export function deposit(amount, currency) {
+  if (currency === "USD") return { type: "account/deposit", payload: amount };
+
+  return async (dispatch) => {
+    const res = await fetch(
+      `https://api.frankfurter.app/latest?amount=${amount}&from=${currency}&to=USD`
+    );
+    const data = await res.json();
+
+    const convertedAmount = data.rates.USD;
+
+    dispatch({ type: "account/deposit", payload: convertedAmount });
+  };
+}
+
+export const { withdraw, requestLoan, payLoan } = accountSlice.actions;
 
 export default accountSlice.reducer;
 
@@ -79,22 +100,6 @@ export default accountSlice.reducer;
 //     default:
 //       return state;
 //   }
-// }
-
-// export function deposit(amount, currency) {
-//   if (currency === "USD") return { type: "account/deposit", payload: amount };
-
-//   return async (dispatch) => {
-//     const res = await fetch(
-//       `https://api.frankfurter.app/latest?amount=${amount}&from=${currency}&to=USD`
-//     );
-//     const data = await res.json();
-
-//     const convertedAmount = data.rates.USD;
-//     console.log(convertedAmount);
-
-//     dispatch({ type: "account/deposit", payload: convertedAmount });
-//   };
 // }
 
 // export function payLoan() {
